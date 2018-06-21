@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>bitbug_favicon.ico</file>
+        <file>yes.ico</file>
+        <file>checkbox_checked.png</file>
+        <file>checkbox_unchecked.png</file>
+        <file>radio_off.png</file>
+        <file>radio_on.png</file>
+        <file>no.ico</file>
+        <file>nothing.ico</file>
+    </qresource>
+</RCC>
