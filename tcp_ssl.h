@@ -3,6 +3,11 @@
 
 #include <QKeyEvent>
 #include <QMainWindow>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QTextCodec>
+#include <QTimer>
 
 namespace Ui
 {
@@ -18,6 +23,10 @@ public:
     ~tcp_ssl();
 
 private slots:
+    void handleTimeOut();
+
+    void reply_finished(QNetworkReply *reply);
+
     void on_lineEdit_eland_id_textChanged(const QString &arg1);
 
     void on_lineEdit_eland_model_textChanged(const QString &arg1);
@@ -30,6 +39,8 @@ private slots:
 
     void on_pushButton_post_clicked();
 
+    void on_pushButton_get_clicked();
+
 private:
     Ui::tcp_ssl *ui;
 
@@ -38,6 +49,12 @@ private:
     int eland_id;
 
     bool tcp_wait;
+
+    QNetworkAccessManager *m_manager;
+
+    QNetworkReply *m_reply;
+
+    QTimer tm;
 };
 
 #endif  // TCP_SSL_H
