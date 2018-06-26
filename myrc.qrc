@@ -8,5 +8,6 @@
         <file>radio_on.png</file>
         <file>no.ico</file>
         <file>nothing.ico</file>
+        <file>nothing.png</file>
     </qresource>
 </RCC>

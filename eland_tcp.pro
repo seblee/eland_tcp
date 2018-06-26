@@ -36,3 +36,5 @@ FORMS += \
 
 RESOURCES += \
     myrc.qrc
+
+RC_ICONS = bitbug_favicon.ico
