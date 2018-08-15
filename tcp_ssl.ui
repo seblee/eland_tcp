@@ -1032,6 +1032,19 @@ selection-background-color: rgb(170, 0, 255);</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_ssl">
+              <property name="font">
+               <font>
+                <family>Arial</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>SSL</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>

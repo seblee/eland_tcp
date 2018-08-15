@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QSslConfiguration>
 #include "ui_tcp_ssl.h"
 
 #define DEFAULT_TIMEZONE 32400
@@ -420,6 +421,32 @@ void tcp_ssl::reply_finished(QNetworkReply *reply)
     tcp_wait = false;
 }
 
+void tcp_ssl::reply_ssl(QNetworkReply *reply)
+{
+    if (tm.isActive()) tm.stop();
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QTextCodec *codec = QTextCodec::codecForName("utf-8");
+
+        QString str = codec->toUnicode(data);
+
+        ui->textEdit->setText(str);
+
+        ui->statusBar->showMessage("status ok", 2000);
+    } else {
+        ui->statusBar->showMessage("status err", 2000);
+        ui->textEdit->append(tr("error = ") + QString::number(reply->error(), 10));
+    }
+
+    QDateTime current_time = QDateTime::currentDateTime();
+    QString current_time_str = current_time.toString("yyyy-MM-dd hh:mm:ss.zzz ddd t");
+    ui->textEdit->append(current_time_str);
+
+    reply->deleteLater();
+    tcp_wait = false;
+}
+
 void tcp_ssl::on_pushButton_clicked()
 {
     ui->checkBox_id->setCheckState(Qt::Unchecked);
@@ -445,4 +472,28 @@ void tcp_ssl::on_pushButton_clicked()
     ui->checkBox_serial->setCheckState(Qt::Unchecked);
     ui->checkBox_serial->setCheckState(Qt::Unchecked);
     ui->checkBox_area_code->setCheckState(Qt::Unchecked);
+}
+
+void tcp_ssl::on_pushButton_ssl_clicked()
+{
+    if (tcp_wait) return;
+    QNetworkRequest request;
+    m_manager = new QNetworkAccessManager(this);
+
+    QSslConfiguration sslconfig;
+    sslconfig.setPeerVerifyMode(QSslSocket::VerifyNone);
+    sslconfig.setProtocol(QSsl::TlsV1_2);
+
+    request.setRawHeader("host", "www.taobao.com");
+    request.setUrl(QUrl("https://www.taobao.com"));
+    request.setSslConfiguration(sslconfig);
+
+    connect(m_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(reply_ssl(QNetworkReply *)));
+    connect(&tm, SIGNAL(timeout()), this, SLOT(handleTimeOut()));
+
+    m_reply = m_manager->get(request);
+    tcp_wait = true;
+    if (tm.isActive()) tm.stop();
+    tm.start(2000);
+    ui->statusBar->showMessage("getting https://www.taobao.com", 2000);
 }

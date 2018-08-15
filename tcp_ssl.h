@@ -27,6 +27,8 @@ private slots:
 
     void reply_finished(QNetworkReply *reply);
 
+    void reply_ssl(QNetworkReply *reply);
+
     void on_lineEdit_eland_id_textChanged(const QString &arg1);
 
     void on_lineEdit_eland_model_textChanged(const QString &arg1);
@@ -42,6 +44,8 @@ private slots:
     void on_pushButton_get_clicked();
 
     void on_pushButton_clicked();
+
+    void on_pushButton_ssl_clicked();
 
 private:
     Ui::tcp_ssl *ui;
